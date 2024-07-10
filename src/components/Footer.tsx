@@ -2,6 +2,7 @@ import { Avatar, Button, Card, Separator } from "@radix-ui/themes";
 import { useContext } from "react";
 import { CurrentUserContext } from "../context/currentUserContextProvider";
 import { CreateEstablishmentButton } from "./CreateEstablishmentButton";
+import Astronaut from '../assets/personas/astronaut.svg'
 
 
 
@@ -51,17 +52,18 @@ export function Footer(){
                             <div className="relative">
                                 <Avatar fallback="A" radius="full" size="4" src={data.image_url}/>
                                 <Avatar 
+                                    style={{backgroundColor: 'lightgray', border: '2px solid white'}}
                                     fallback="A" 
                                     radius="full" 
                                     size="2" 
-                                    src={data.image_url} 
+                                    src={Astronaut} 
                                     className="absolute -bottom-1 z-10"
                                     ml="-4"
                                 />
                             </div>
 
                             <div className="ml-4">
-                                <h1 className="w-26 ">Bem vindo de volta, {data.name}</h1>
+                                <h1 className="w-26 ">Bem vindo de volta, <span className="text-indigo-700 font-semibold">{data.name}</span></h1>
                                 <p className="text-xs ml-2 text-green-800 bold">Seu nível atual é <span className="font-extrabold text-green-600">ASTRONAUTA</span></p> 
                             </div>
                         </div>

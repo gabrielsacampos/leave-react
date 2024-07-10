@@ -42,12 +42,10 @@ export function RatingList(){
                                         }}
                                         badgeContent={
                                             <Avatar 
-                                                style={{backgroundColor: 'lightgray'}}
+                                                style={{backgroundColor: 'lightgray', border: '2px solid white'}}
                                                 sx={{ width: 30, height: 30 }}
                                                 alt="Remy Sharp" 
                                                 src={personasMock.find(persona => persona.key === item.user_category)?.src}
-                                                // src={`./src/assets/personas/${item.user_category}`} 
-                                                className="border-2 border-white"
                                                 />
                                             }
                                             >
