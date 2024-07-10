@@ -1,21 +1,21 @@
 import { Close, LocationOn, Search } from '@mui/icons-material';
-import {Loader} from 'antd'
-import axios from 'axios';
 import { Alert, Button, Card, CircularProgress, IconButton, TextField } from '@mui/material';
+import axios from 'axios';
 import { CircleArrowRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { FieldValues, UseFormRegister, set } from 'react-hook-form';
+import { FieldValues, UseFormReturn } from 'react-hook-form';
+import * as zod from 'zod';
 import { AddressFromCep } from '../../hooks/useFetchCep';
-import * as zod from 'zod'
 
 
 export interface AddressFormProps {
     onNextStepClick: () => void
-    register: UseFormRegister<FieldValues>
+    useForm: UseFormReturn<FieldValues, undefined>
 }
 
 
-export function AddressForm({onNextStepClick, register}: AddressFormProps){
+export function AddressForm({onNextStepClick, useForm}: AddressFormProps){
+    const {register} = useForm
     const [currentCep, setCurrentCep] = useState<string | null >(null)
     const [addressData, setAddressData] = useState<AddressFromCep | null>(null)
     const [isLoading, setIsLoading] = useState(false)

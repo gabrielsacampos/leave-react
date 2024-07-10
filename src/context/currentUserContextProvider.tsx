@@ -3,9 +3,13 @@ import { UseFetchGetUserType, useFetchGetUser } from "../hooks/useFetchGetUser";
 
 const mockUserId = 'uuid-luiza-santos';
 
-export type CurrentUserContextType = UseFetchGetUserType;
+export interface CurrentUserContextType {
+    data: UseFetchGetUserType['data'],
+    isLoading: UseFetchGetUserType['isLoading'],
+    error: UseFetchGetUserType['error']
+}
 
-export const CurrentUserContext = createContext<CurrentUserContextType | undefined>(undefined);
+export const CurrentUserContext = createContext<CurrentUserContextType | undefined>({} as CurrentUserContextType);
 
 export function CurrentUserContextProvider({children}: {children: React.ReactNode}) {
     const {data, isLoading, error} = useFetchGetUser(mockUserId)

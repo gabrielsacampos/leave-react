@@ -1,5 +1,6 @@
+import axios from "axios";
 import { Dialog, DialogContent, DialogTitle, Step, StepLabel, Stepper } from "@mui/material";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
 import { AddressDetails } from "./AddressDetails";
 import { AddressForm } from "./CepSearch";
@@ -9,8 +10,13 @@ import { LastStep } from "./LastStep";
 import { SuccessCreateEstablishmentDialog } from "./DialogSuccesCreateEstablishment";
 import {zodResolver} from '@hookform/resolvers/zod'
 import * as zod from 'zod'
+import { CurrentUserContext } from "../../context/currentUserContextProvider";
 
 const newEstablishmentSchema = zod.object({
+    name: zod.string(),
+    id_sponsor: zod.string(),
+    establishmen_type_id: zod.string(),
+    description: zod.string(),
     cep: zod.string(),
     address: zod.string(),
     city: zod.string(),
@@ -24,16 +30,22 @@ interface CreateEstablishmentDialogProps {
 }
 
 export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps){
+    const {data: user} = useContext(CurrentUserContext)
     const {open, onClose} = props
-    const [step, setStep] = useState(2)
+    const [step, setStep] = useState(0)
     
-    const {register, handleSubmit, watch} = useForm({
+    const form = useForm({
         resolver: zodResolver(newEstablishmentSchema)
     })
+    
+    form.register('id_sponsor', {value: user.id})
 
-    const formData = watch()
+    const formData = form.watch()
+    console.log(formData)
     
     function handleClose(){
+        setStep(0)
+        form.reset()
         onClose()
     }
 
@@ -46,6 +58,7 @@ export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps)
     }
 
 
+
     let currentContent: React.ReactNode = null
 
     switch(step){
@@ -53,13 +66,13 @@ export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps)
             currentContent = <Cover onNextStepClick={handleNextStepClick} />
             break
         case 1:
-            currentContent = <AddressForm onNextStepClick={handleNextStepClick} register={register}/>
+            currentContent = <AddressForm onNextStepClick={handleNextStepClick} useForm={form}/>
             break
         case 2:
-            currentContent = <AddressDetails address={formData.address} city={formData.city} neighborhood={formData.neighborhood} state={formData.state} onBackClick={handlePreviousStepClick} register={register} onNextStepClick={handleNextStepClick}/>
+            currentContent = <AddressDetails address={formData.address} city={formData.city} neighborhood={formData.neighborhood} state={formData.state} onBackClick={handlePreviousStepClick} useForm={form} onNextStepClick={handleNextStepClick}/>
             break
         case 3:
-            currentContent = <LastStep onNextStepClick={handleNextStepClick} onBackClick={handlePreviousStepClick}/>
+            currentContent = <LastStep  onBackClick={handlePreviousStepClick} onConfirmClick={handleNextStepClick} useForm={form}/>
             break
     }
 

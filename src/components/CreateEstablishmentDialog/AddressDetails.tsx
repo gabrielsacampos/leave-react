@@ -1,8 +1,8 @@
 import { Alert, Button, Card, TextField } from "@mui/material";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { FieldValues, UseFormRegister } from "react-hook-form";
-import * as zod from 'zod'
+import { useRef, useState } from "react";
+import { FieldValues, UseFormReturn } from "react-hook-form";
+import * as zod from 'zod';
 
 interface AddressDetailsProps {
     address: string;
@@ -11,18 +11,20 @@ interface AddressDetailsProps {
     state: string;
     onBackClick: () => void;
     onNextStepClick: () => void;
-    register: UseFormRegister<FieldValues>
+    useForm: UseFormReturn<FieldValues, undefined>
 }
 
 export function AddressDetails(props: AddressDetailsProps){
-    const {onBackClick, register, onNextStepClick} = props
+    const {onBackClick, useForm, onNextStepClick} = props
+    const {register} = useForm
+    
     const [isError, setIsError] = useState(false)
     const numberInputRef = useRef<HTMLInputElement>()
     const complementInputRef = useRef<HTMLInputElement>()
 
     
 
-    function handleConfirmClick(){
+    function handleNextStepClick(){
         try{
             zod.string().parse(numberInputRef.current?.value)
             register('number', {value: numberInputRef.current?.value})
@@ -80,7 +82,7 @@ export function AddressDetails(props: AddressDetailsProps){
                 />
             </div>
 
-            {isError && <Alert severity="error"> <span className='text-red-500 font-bold'>CEP inválido</span>. Você deve inserir <span className='font-bold text-red-500'>8</span> números e evitar pontuação</Alert>}
+            {isError && <Alert severity="error"> <span className='text-red-500 font-bold'>CEP inválido</span>. Você deve inserir <span className='font-bold text-red-500'>8</span> números e não inserir pontuação</Alert>}
 
             <div className="flex gap-1">
 
@@ -93,7 +95,7 @@ export function AddressDetails(props: AddressDetailsProps){
                     Voltar
                 </Button>
                 <Button
-                    onClick={handleConfirmClick}
+                    onClick={handleNextStepClick}
                     variant="contained"
                     endIcon={<ArrowRightCircle />}
                     color="success"
