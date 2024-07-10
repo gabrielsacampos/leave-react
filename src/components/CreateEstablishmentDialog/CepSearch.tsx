@@ -1,11 +1,12 @@
 import { Close, LocationOn, Search } from '@mui/icons-material';
 import {Loader} from 'antd'
 import axios from 'axios';
-import { Button, Card, CircularProgress, IconButton, TextField } from '@mui/material';
+import { Alert, Button, Card, CircularProgress, IconButton, TextField } from '@mui/material';
 import { CircleArrowRight } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
-import { FieldValues, UseFormRegister } from 'react-hook-form';
+import { FieldValues, UseFormRegister, set } from 'react-hook-form';
 import { AddressFromCep } from '../../hooks/useFetchCep';
+import * as zod from 'zod'
 
 
 export interface AddressFormProps {
@@ -44,12 +45,8 @@ export function AddressForm({onNextStepClick, register}: AddressFormProps){
             setAddressData(null)
         }
         
-    }, [currentCep, isLoading])
+    }, [currentCep, isLoading, isError])
     
-
-    if(isError){
-        return <div>Erro ao buscar o CEP</div>
-    }
 
     function handleConfirmClick(){
         onNextStepClick()
@@ -60,24 +57,33 @@ export function AddressForm({onNextStepClick, register}: AddressFormProps){
         register('state', {value: addressData?.uf})
     }
 
+    
     function handleSearchButton(){
-        setIsLoading(true)
-        setCurrentCep(cepInputRef.current!.value)
+        try {
+            setIsError(false)
+            zod.string().min(8).max(8).parse(cepInputRef.current!.value)
+            setIsLoading(true)
+            setCurrentCep(cepInputRef.current!.value)
+        } catch (error) {
+            setIsError(true)
+        }
     }
 
     return (
         <div className='flex flex-col gap-4'>
-            <div className="flex gap-1">
+            <div className="flex flex-col gap-5">
                     <TextField
                         inputRef={cepInputRef}
-                        onChange={(event) => console.log(event.target.value)}
                         id="cep"
                         label="CEP"
                         variant="outlined"
                         style={{width: '100%'}}
                         InputProps={{
                             endAdornment: (
-                                <IconButton onClick={handleSearchButton}>
+                                <IconButton 
+                                    onClick={handleSearchButton}
+                                    disabled={isLoading || !!addressData }
+                                >
                                     {
                                         isLoading? <CircularProgress size="1rem"/> :  <Search />
                                     }
@@ -85,6 +91,7 @@ export function AddressForm({onNextStepClick, register}: AddressFormProps){
                             )
                         }}
                     />
+                    {isError && <Alert severity="error"> <span className='text-red-500 font-bold'>CEP inválido</span>. Você deve inserir <span className='font-bold text-red-500'>8</span> números e evitar pontuação</Alert>}
             </div>
             <div className={`flex flex-col gap-2 ${addressData?.logradouro? '': 'hidden'}`}>
                 <Card
@@ -95,21 +102,24 @@ export function AddressForm({onNextStepClick, register}: AddressFormProps){
                         padding: '16px'
                     }}
                 >
-                    <p className='text-xs text-zinc-500'>
-                        <LocationOn 
-                            color="primary"
-                        />
-                        {addressData?.logradouro}, {addressData?.bairro}, {addressData?.localidade} - {addressData?.uf}
-                    </p>
+                    <div className="flex items-center">
+                        <p className='text-xs text-zinc-500'>
+                            <LocationOn 
+                                color="primary"
+                            />
+                            {addressData?.logradouro}, {addressData?.bairro}, {addressData?.localidade} - {addressData?.uf}
+                        </p>
+                        <IconButton
+                            style={{marginLeft: 'auto'}}
+                            onClick={() => setCurrentCep(null)}
+                        >
+                            <Close color='error'/>
+                        </IconButton>
+                    </div>
 
                 </Card>
 
                 <div className='flex justify-center gap-1'>
-                    <IconButton
-                        onClick={() => setCurrentCep(null)}
-                    >
-                        <Close color='error'/>
-                    </IconButton>
                     <Button
                         onClick={handleConfirmClick}
                         style={{boxShadow: 'none'}}

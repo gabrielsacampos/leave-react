@@ -1,7 +1,8 @@
-import { Button, Card, TextField } from "@mui/material";
+import { Alert, Button, Card, TextField } from "@mui/material";
 import { ArrowLeftCircle, ArrowRightCircle } from "lucide-react";
-import { useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { FieldValues, UseFormRegister } from "react-hook-form";
+import * as zod from 'zod'
 
 interface AddressDetailsProps {
     address: string;
@@ -15,13 +16,21 @@ interface AddressDetailsProps {
 
 export function AddressDetails(props: AddressDetailsProps){
     const {onBackClick, register, onNextStepClick} = props
+    const [isError, setIsError] = useState(false)
     const numberInputRef = useRef<HTMLInputElement>()
     const complementInputRef = useRef<HTMLInputElement>()
 
+    
+
     function handleConfirmClick(){
-        register('number', {value: numberInputRef.current?.value})
-        register('complement', {value: complementInputRef.current?.value})
-        onNextStepClick()
+        try{
+            zod.string().parse(numberInputRef.current?.value)
+            register('number', {value: numberInputRef.current?.value})
+            register('complement', {value: complementInputRef.current?.value})
+            onNextStepClick()
+        }catch(error){
+            setIsError(true)
+        }
     }
 
     return (
@@ -70,6 +79,8 @@ export function AddressDetails(props: AddressDetailsProps){
                     style={{width: '100%'}}
                 />
             </div>
+
+            {isError && <Alert severity="error"> <span className='text-red-500 font-bold'>CEP inválido</span>. Você deve inserir <span className='font-bold text-red-500'>8</span> números e evitar pontuação</Alert>}
 
             <div className="flex gap-1">
 

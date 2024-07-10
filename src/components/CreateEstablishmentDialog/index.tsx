@@ -7,6 +7,16 @@ import { Cover } from "./Cover";
 import ControlPanel from "../../assets/control-panel.svg";
 import { LastStep } from "./LastStep";
 import { SuccessCreateEstablishmentDialog } from "./DialogSuccesCreateEstablishment";
+import {zodResolver} from '@hookform/resolvers/zod'
+import * as zod from 'zod'
+
+const newEstablishmentSchema = zod.object({
+    cep: zod.string(),
+    address: zod.string(),
+    city: zod.string(),
+    neighborhood: zod.string(),
+    state: zod.string()
+})
 
 interface CreateEstablishmentDialogProps {
     open: boolean
@@ -15,8 +25,11 @@ interface CreateEstablishmentDialogProps {
 
 export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps){
     const {open, onClose} = props
-    const [step, setStep] = useState(0)
-    const {register, handleSubmit, watch} = useForm()
+    const [step, setStep] = useState(2)
+    
+    const {register, handleSubmit, watch} = useForm({
+        resolver: zodResolver(newEstablishmentSchema)
+    })
 
     const formData = watch()
     
