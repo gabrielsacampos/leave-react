@@ -1,4 +1,3 @@
-import axios from "axios";
 import { Dialog, DialogContent, DialogTitle, Step, StepLabel, Stepper } from "@mui/material";
 import { useContext, useState } from "react";
 import { useForm } from "react-hook-form";
@@ -41,7 +40,6 @@ export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps)
     form.register('id_sponsor', {value: user.id})
 
     const formData = form.watch()
-    console.log(formData)
     
     function handleClose(){
         setStep(0)

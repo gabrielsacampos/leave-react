@@ -5,7 +5,6 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeftCircle, SatelliteDish } from "lucide-react";
 import * as zod from 'zod'
 import { UseFormReturn, FieldValues } from "react-hook-form";
-import { DialogErrorCreatingEstablishmentDialog } from "./DialogErrorCreatingEstablishment";
 
 
 export interface LastStepProps {
@@ -104,8 +103,6 @@ export function LastStep(props: LastStepProps){
             setIsError(true)
         }
     }
-
-    if(isPostError) return <DialogErrorCreatingEstablishmentDialog />
 
     return (
         <div className="flex flex-col justify-center items-center">
