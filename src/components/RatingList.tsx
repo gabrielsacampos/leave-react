@@ -2,6 +2,20 @@ import {  Card } from "@radix-ui/themes"
 import { useFetchRatingsList } from "../hooks/useFetchRatingsList"
 import { dateFormatter } from "../utils/dateFormatter"
 import { Badge, Avatar } from "@mui/material"
+import Alien from '../assets/personas/alien.svg'
+import Astronaut from '../assets/personas/astronaut.svg'
+import Curious from '../assets/personas/curious.svg'
+import Explorer from '../assets/personas/explorer.svg'
+import Scientist from '../assets/personas/scientist.svg'
+
+const personasMock = [
+    {key: 'alien', src: Alien},
+    {key: 'astronaut', src: Astronaut},
+    {key: 'curious', src: Curious},
+    {key: 'explorer', src: Explorer},
+    {key: 'scientist', src: Scientist},
+]
+
 
 export function RatingList(){
     const {data, isLoading} = useFetchRatingsList()
@@ -28,21 +42,23 @@ export function RatingList(){
                                         }}
                                         badgeContent={
                                             <Avatar 
+                                                style={{backgroundColor: 'lightgray'}}
                                                 sx={{ width: 30, height: 30 }}
                                                 alt="Remy Sharp" 
-                                                src={item.image_url} 
+                                                src={personasMock.find(persona => persona.key === item.user_category)?.src}
+                                                // src={`./src/assets/personas/${item.user_category}`} 
                                                 className="border-2 border-white"
-                                            />
-                                        }
-                                        >
+                                                />
+                                            }
+                                            >
                                             <Avatar 
                                                 alt="Remy Sharp" 
-                                                src={item.image_url} 
+                                                src={item.user_image_url} 
                                                 
                                             />
                                         </Badge>
                                     <div>
-                                        <h2 className="font-bold text-zinc-600">{item.name}</h2>
+                                        <h2 className="font-bold text-zinc-600">{item.user_name}</h2>
                                         <span className="text-xs tezt-zinc-400">{dateFormatter.format( new Date(item.created_at))}</span>
                                     </div>
                                 </div>

@@ -5,23 +5,14 @@ import { api } from '../lib/axios'
 
 
 interface Ratings {
-    id: string
-    stars: number
-    review: string
-    id_establishment: string
-    id_user: string
+    user_name: string,
+    user_image_url: string,
+    user_category: string,
+    review: string,
+    date: string,
+    stars: number,
+    establishment_name: string,
     created_at: string
-    updated_at: string
-    name: string
-    address: string
-    description: string
-    id_type: string
-    id_sponsor: string
-    tag: string
-    image_url: string
-    email: string
-    global_score: number
-    week_score: number
 }
 
 export type UseFetchRatingsListType = {
