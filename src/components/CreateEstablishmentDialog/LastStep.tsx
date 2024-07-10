@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from "react";
 import { ArrowLeftCircle, SatelliteDish } from "lucide-react";
 import * as zod from 'zod'
 import { UseFormReturn, FieldValues } from "react-hook-form";
+import { DialogErrorCreatingEstablishmentDialog } from "./DialogErrorCreatingEstablishment";
 
 
 export interface LastStepProps {
@@ -20,6 +21,7 @@ export function LastStep(props: LastStepProps){
     const {isLoading, data} = useFetchEstablishmentTypes()
     
     const [selectedType, setSelectedType] = useState<string>('')
+    const [isPostError, setIsPostError] = useState(false)
     const [isError, setIsError] = useState(false)
 
     const descriptionRef = useRef<HTMLInputElement>()
@@ -29,7 +31,7 @@ export function LastStep(props: LastStepProps){
         if(selectedType && descriptionRef.current?.value && nameRef.current?.value){
             setIsError(false)
         }
-    }, [isError, selectedType])
+    }, [isError, selectedType, isPostError])
     
     if(isLoading) return <div>Carregando...</div>
 
@@ -81,6 +83,7 @@ export function LastStep(props: LastStepProps){
             console.log(response.data)
         }
         catch(error){
+            setIsPostError(true)
             console.log(error)
         }
     }
@@ -101,6 +104,8 @@ export function LastStep(props: LastStepProps){
             setIsError(true)
         }
     }
+
+    if(isPostError) return <DialogErrorCreatingEstablishmentDialog />
 
     return (
         <div className="flex flex-col justify-center items-center">

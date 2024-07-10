@@ -16,6 +16,7 @@ export interface AddressFormProps {
 
 export function AddressForm({onNextStepClick, useForm}: AddressFormProps){
     const {register} = useForm
+    const [isInvalidCep, setIsInvalidCep] = useState(false)
     const [currentCep, setCurrentCep] = useState<string | null >(null)
     const [addressData, setAddressData] = useState<AddressFromCep | null>(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -24,11 +25,17 @@ export function AddressForm({onNextStepClick, useForm}: AddressFormProps){
 
 
     useEffect(() => {
+        
         const fetchCepInfo = async () => {
             try{
                 const response = await axios.get(`https://viacep.com.br/ws/${currentCep}/json/`)
                 await new Promise(resolve => setTimeout(resolve, 1000))
+                if(response.data.erro){
+                    setIsInvalidCep(true)
+                    return
+                }
                 setAddressData(response.data)
+                setIsInvalidCep(false)
             }catch(error){
                 setIsError(true)
                 console.error(error)
@@ -45,7 +52,7 @@ export function AddressForm({onNextStepClick, useForm}: AddressFormProps){
             setAddressData(null)
         }
         
-    }, [currentCep, isLoading, isError])
+    }, [currentCep, isLoading, isError, isInvalidCep])
     
 
     function handleConfirmClick(){
@@ -61,6 +68,7 @@ export function AddressForm({onNextStepClick, useForm}: AddressFormProps){
     function handleSearchButton(){
         try {
             setIsError(false)
+            setIsInvalidCep(false)
             zod.string().min(8).max(8).parse(cepInputRef.current!.value)
             setIsLoading(true)
             setCurrentCep(cepInputRef.current!.value)
@@ -91,6 +99,7 @@ export function AddressForm({onNextStepClick, useForm}: AddressFormProps){
                             )
                         }}
                     />
+                    {isInvalidCep && <Alert severity="error"> <span className='text-red-500 font-bold'>Número de CEP inválido. </span>Tente novamente</Alert>}
                     {isError && <Alert severity="error"> <span className='text-red-500 font-bold'>CEP inválido</span>. Você deve inserir <span className='font-bold text-red-500'>8</span> números e evitar pontuação</Alert>}
             </div>
             <div className={`flex flex-col gap-2 ${addressData?.logradouro? '': 'hidden'}`}>

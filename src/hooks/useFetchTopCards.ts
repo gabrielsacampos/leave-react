@@ -27,7 +27,6 @@ export function useFetchTopcards(): UseFetchTopcardsType {
             queryKey: ['topcards'],
             queryFn: async () => {
                 const response = await api.get('establishments/topcards')
-                console.log(response.data)  
                 return response.data.establishments
             }
         }
