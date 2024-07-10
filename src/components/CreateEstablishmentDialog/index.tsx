@@ -1,33 +1,35 @@
 import { Dialog, DialogContent, DialogTitle, Step, StepLabel, Stepper } from "@mui/material";
-import { useFetchEstablishmentTypes } from "../../hooks/useFetchEstablishmentTypes";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Map from "../../assets/map.svg";
-import { useEffect, useState } from "react";
-import { Cover } from "./Cover";
-import { AddressForm } from "./CepSearch";
 import { AddressDetails } from "./AddressDetails";
+import { AddressForm } from "./CepSearch";
+import { Cover } from "./Cover";
+import ControlPanel from "../../assets/control-panel.svg";
+import { LastStep } from "./LastStep";
+import { SuccessCreateEstablishmentDialog } from "./DialogSuccesCreateEstablishment";
 
-export function CreateEstablishmentDialog(){
+interface CreateEstablishmentDialogProps {
+    open: boolean
+    onClose: () => void
+}
+
+export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps){
+    const {open, onClose} = props
     const [step, setStep] = useState(0)
     const {register, handleSubmit, watch} = useForm()
+
+    const formData = watch()
     
-
-    const {data, isLoading} = useFetchEstablishmentTypes() 
-    
-//      // Use watch to monitor all field values
-//     const watchedFields = watch();
-
-//   // Log watchedFields to the console
-//     useEffect(() => {
-//         console.log('Watched Fields:', watchedFields);
-//     }, [watchedFields]);
-
-    if(isLoading){
-        return <div>Carregando...</div>
+    function handleClose(){
+        onClose()
     }
 
-    function handleCoverNextStepClick(stepIndex: number){
-        setStep(stepIndex)
+    function handleNextStepClick(){
+        setStep(step + 1)
+    }
+
+    function handlePreviousStepClick(){
+        setStep(step - 1)
     }
 
 
@@ -35,75 +37,64 @@ export function CreateEstablishmentDialog(){
 
     switch(step){
         case 0:
-            currentContent = <Cover onNextStepClick={() => handleCoverNextStepClick(1)} />
+            currentContent = <Cover onNextStepClick={handleNextStepClick} />
             break
         case 1:
-            currentContent = <AddressForm onNextStepClick={() => handleCoverNextStepClick(2)} register={register}/>
+            currentContent = <AddressForm onNextStepClick={handleNextStepClick} register={register}/>
             break
         case 2:
-            currentContent = <p>step3</p>
+            currentContent = <AddressDetails address={formData.address} city={formData.city} neighborhood={formData.neighborhood} state={formData.state} onBackClick={handlePreviousStepClick} register={register} onNextStepClick={handleNextStepClick}/>
             break
-        default:
-            currentContent = <p>default</p>
+        case 3:
+            currentContent = <LastStep onNextStepClick={handleNextStepClick} onBackClick={handlePreviousStepClick}/>
             break
+    }
+
+    
+    if(step === 4){
+        return (
+            <Dialog 
+                open={open}
+                onClose={handleClose}  
+            >
+                <DialogContent>
+                    <SuccessCreateEstablishmentDialog />
+                </DialogContent>
+            </Dialog>
+        )
     }
 
     return (
         <Dialog
-            open={true}
+            open={open}
+            onClose={handleClose}
         >
             <DialogTitle
                 className="text-zinc-600 flex flex-col items-center"
             >
-                <img src={Map} width="200px"/>
-                Vamos adicionar um novo lugar ao nosso radar 
+                <img src={ControlPanel} width="150px" />
+                Vamos adicionar um novo registro ao nosso radar 
             </DialogTitle>
             <DialogContent>
-
-
-            <div className={`${step === 0? 'hidden': ''}`}>
-                <Stepper 
-                    activeStep={step-1} 
-                    alternativeLabel
-                    style={{padding: '16px', marginBottom: '16px'}} 
-                >
-                    <Step>
-                        <StepLabel>Coleta de dados</StepLabel>
-                    </Step>
-                    <Step>
-                        <StepLabel>Refinamento</StepLabel>
-                    </Step>
-                    <Step>
-                        <StepLabel>Registro</StepLabel>
-                    </Step>
-                </Stepper>
-            </div>
-                
-                {currentContent}
-
-                
-                {/* <InputLabel id="demo-simple-select-label">Tipo</InputLabel>
-                <Select
-                    style={{width: '100%'}}
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={selectValue}
-                    label="Tipo"
-                    onChange={handleSelectChange}
+                <div className={`${step === 0? 'hidden': ''}`}>
+                    <Stepper 
+                        activeStep={step-1} 
+                        alternativeLabel
+                        style={{padding: '16px', marginBottom: '16px'}} 
                     >
-                    {
-                        data!.map((item) => {
-                            return (
-                                <MenuItem value={item.id}>{item.name}</MenuItem>
-                            )
-                        })
-                    }
-                </Select>
-
-                <AddressForm /> */}
-            
+                        <Step>
+                            <StepLabel>Coleta de dados</StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel>Refinamento</StepLabel>
+                        </Step>
+                        <Step>
+                            <StepLabel>Registro</StepLabel>
+                        </Step>
+                    </Stepper>
+                </div>
+                {currentContent}
             </DialogContent>
-            
         </Dialog>
     )
 }

@@ -1,7 +1,7 @@
 import { Avatar, Button, Card, Separator } from "@radix-ui/themes";
 import { useContext } from "react";
 import { CurrentUserContext } from "../context/currentUserContextProvider";
-import { ActionButtons } from "./ActionButtons";
+import { CreateEstablishmentButton } from "./CreateEstablishmentButton";
 
 
 
@@ -72,7 +72,7 @@ export function Footer(){
                 </div>
                     
                 <div className="w-1/3 flex justify-end">
-                        <ActionButtons />
+                        <CreateEstablishmentButton />
                 </div>
             </footer>
         
