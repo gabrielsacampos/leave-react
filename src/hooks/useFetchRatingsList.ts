@@ -12,6 +12,7 @@ interface Ratings {
     date: string,
     stars: number,
     establishment_name: string,
+    establishment_image: string,
     created_at: string
 }
 

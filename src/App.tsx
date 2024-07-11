@@ -6,8 +6,8 @@ import { Footer } from './components/Footer'
 import { RatingList } from './components/RatingList'
 import { TopCards } from './components/Topcards'
 import { CurrentUserContextProvider } from './context/currentUserContextProvider'
-import { queryClient } from './lib/react-query'
 import { RatingDialog } from './components/RatingDialog'
+import { queryClient } from './lib/react-query'
 
 function App() {
 

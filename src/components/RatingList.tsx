@@ -7,6 +7,7 @@ import Astronaut from '../assets/personas/astronaut.svg'
 import Curious from '../assets/personas/curious.svg'
 import Explorer from '../assets/personas/explorer.svg'
 import Scientist from '../assets/personas/scientist.svg'
+import { MapPin } from "lucide-react"
 
 const personasMock = [
     {key: 'alien', src: Alien},
@@ -62,6 +63,10 @@ export function RatingList(){
                                 </div>
                                 <div className="p-2 flex flex-col ml-4">
                                     <p className="text-xs text-zinc-500 italic max-w-[500px]">"{item.review}"</p>
+                                        <div className="flex gap-2 items-center">
+                                            <MapPin color="gray" size={10} /> 
+                                            <span className="text-sm text-zinc-500 font-extrabold mr-10">{item.establishment_name}</span>
+                                        </div>
                                     <div className="w-full text-xs flex justify-end items-center gap-1 mt-5">
                                         <span className="font-bold text-sm text-zinc-500">{item.stars}</span>
                                         <i className="pi pi-bolt" style={{ fontSize: '1rem', color: 'orange' }}></i>

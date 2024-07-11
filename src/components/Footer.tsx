@@ -52,7 +52,7 @@ export function Footer(){
                     >
                         <div className="flex  items-center gap-2">
                             <div className="relative">
-                                <Avatar fallback="A" radius="full" size="4" src={data.image_url}/>
+                                <Avatar fallback="A" radius="full" size="4" src={data!.image_url}/>
                                 <Avatar 
                                     style={{backgroundColor: 'lightgray', border: '2px solid white'}}
                                     fallback="A" 
@@ -65,7 +65,7 @@ export function Footer(){
                             </div>
 
                             <div className="ml-4">
-                                <h1 className="w-26 ">Bem vindo de volta, <span className="text-indigo-700 font-semibold">{data.name}</span></h1>
+                                <h1 className="w-26 ">Bem vindo de volta, <span className="text-indigo-700 font-semibold">{data!.name}</span></h1>
                                 <p className="text-xs ml-2 text-green-800 bold">Seu nível atual é <span className="font-extrabold text-green-600">ASTRONAUTA</span></p> 
                             </div>
                         </div>

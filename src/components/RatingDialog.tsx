@@ -55,7 +55,7 @@ export function RatingDialog({children}: RatingDialogProps){
 
     async function postData(){
         try{
-            register('id_user', {value: user.id})
+            register('id_user', {value: user!.id})
             const formData = watch()
             if(!rantingSchema.safeParse(formData).success){
                 setIsErrorInForm(true)

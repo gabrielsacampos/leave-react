@@ -1,8 +1,12 @@
 import { useQuery } from "@tanstack/react-query"
 import { api } from "../lib/axios"
 
-interface Establishment {
+export interface Establishment {
     id: string
+    sponsor_name?: string
+    sponsor_image?: string
+    image_url: string
+    description: string
     name: string
     address: string
 }

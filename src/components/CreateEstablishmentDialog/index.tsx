@@ -29,7 +29,8 @@ interface CreateEstablishmentDialogProps {
 }
 
 export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps){
-    const {data: user} = useContext(CurrentUserContext)
+    const currentUser = useContext(CurrentUserContext)
+
     const {open, onClose} = props
     const [step, setStep] = useState(0)
     
@@ -37,7 +38,7 @@ export function CreateEstablishmentDialog(props: CreateEstablishmentDialogProps)
         resolver: zodResolver(newEstablishmentSchema)
     })
     
-    form.register('id_sponsor', {value: user.id})
+    form.register('id_sponsor', {value: currentUser.data!.id})
 
     const formData = form.watch()
     

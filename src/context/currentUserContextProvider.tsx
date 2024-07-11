@@ -9,7 +9,7 @@ export interface CurrentUserContextType {
     error: UseFetchGetUserType['error']
 }
 
-export const CurrentUserContext = createContext<CurrentUserContextType | undefined>({} as CurrentUserContextType);
+export const CurrentUserContext = createContext<CurrentUserContextType>({} as CurrentUserContextType);
 
 export function CurrentUserContextProvider({children}: {children: React.ReactNode}) {
     const {data, isLoading, error} = useFetchGetUser(mockUserId)

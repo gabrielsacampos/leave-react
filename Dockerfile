@@ -1,18 +1,24 @@
-# Define the build stage
-FROM node:latest as build
-WORKDIR /app
-COPY . .
-RUN npm install && npm run build
+# Build
+FROM node:18-alpine as build
 
-# Define the nginx stage
+WORKDIR /app
+
+ENV PATH /app/node_modules/.bin:$PATH
+
+COPY package*.json ./
+RUN npm ci --silent
+COPY . ./
+
+COPY .env.dev .env
+
+RUN npm run build
+
+# Server
 FROM nginx:stable-alpine
+
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY ./docker/nginx.conf /etc/nginx/conf.d/default.conf
 
 EXPOSE 3000
 
 CMD ["nginx", "-g", "daemon off;"]
-
-
-# docker build -t front .
-# docker run -p 3000:3000 front
