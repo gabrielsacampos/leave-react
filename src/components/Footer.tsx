@@ -3,6 +3,7 @@ import { useContext } from "react";
 import { CurrentUserContext } from "../context/currentUserContextProvider";
 import { CreateEstablishmentButton } from "./CreateEstablishmentButton";
 import Astronaut from '../assets/personas/astronaut.svg'
+import { RankingList } from "./RankingList";
 
 
 
@@ -20,7 +21,7 @@ export function Footer(){
             >
 
                 <div className="w-1/3 flex gap-2 items-center">
-                    
+                    <RankingList>
                         <Button
                             color="green"
                             variant="solid"
@@ -30,6 +31,7 @@ export function Footer(){
                             
                             Ranking 🌟
                         </Button>
+                    </RankingList>
                         <Separator orientation="vertical" size="2" mr="3" />
                          <div>
                             <p className="text-xs text-zinc-500 border-b border-zinc-500/10 ">Seu score atual</p>
