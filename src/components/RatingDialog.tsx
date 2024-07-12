@@ -1,4 +1,3 @@
-import axios from 'axios';
 import Bolt from '@mui/icons-material/Bolt';
 import Speech from '../assets/speech.svg'
 import { Alert, Rating } from "@mui/material";
