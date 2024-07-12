@@ -9,6 +9,7 @@ import { CurrentUserContext } from "../context/currentUserContextProvider";
 import { useFetchEstablishments } from "../hooks/useFetchEstablishments";
 import { queryClient } from "../lib/react-query"
 import * as zod from 'zod'
+import { api } from '../lib/axios';
 
 
 const rantingSchema = zod.object({
@@ -62,7 +63,7 @@ export function RatingDialog({children}: RatingDialogProps){
                 return
             }
 
-            await axios.post('http://localhost:3000/ratings', formData)
+            await api.post('ratings', formData)
             setIsRatingDialogOpen(false)
             reset()
             queryClient.invalidateQueries({queryKey: ['ratings']})
