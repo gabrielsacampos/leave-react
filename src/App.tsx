@@ -1,18 +1,15 @@
 
 import { Button, Separator } from '@radix-ui/themes'
-import { QueryClientProvider } from '@tanstack/react-query'
 import Illustration from './assets/alien-lab.svg'
 import { Footer } from './components/Footer'
+import { RatingDialog } from './components/RatingDialog'
 import { RatingList } from './components/RatingList'
 import { TopCards } from './components/Topcards'
 import { CurrentUserContextProvider } from './context/currentUserContextProvider'
-import { RatingDialog } from './components/RatingDialog'
-import { queryClient } from './lib/react-query'
 
 function App() {
 
   return (
-    <QueryClientProvider client={queryClient}>
       <CurrentUserContextProvider>
         <div>
             <TopCards />
@@ -41,7 +38,6 @@ function App() {
             <Footer />
         </div>
       </CurrentUserContextProvider>
-    </QueryClientProvider>
   )
 }
 

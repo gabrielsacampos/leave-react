@@ -1,12 +1,31 @@
 import {Avatar, Badge, Card} from '@radix-ui/themes'
 import { useFetchTopcards } from '../hooks/useFetchTopCards'
 import { EstablishmentDetailsDialog } from './EstablishmentDetailsDialog'
+import {Skeleton} from '@mui/material'
 
 export function TopCards(){
     const {data, isLoading} = useFetchTopcards()
 
-    if(isLoading) return <div>Loading...</div>
+    if(isLoading) {
+            return (
+                <div className='flex  gap-10 justify-center p-4'>
+                    {
+                        Array.from({length: 4}).map(() => {
+                            return (
+                                <div className='p-4 rounded-md border border-black/10  max-w-[250px], h-[80px]'>
+                                    <div className='flex gap-2 items-center'>
+                                        <Skeleton variant="circular" width={50} height={50} />
+                                        <Skeleton variant="text" width={100} height={20} />
+                                    </div>
+                                </div>
+                            )
+                        })
+                    }
+                </div>
+            )
+    }
     
+
     return (
         <div className="flex justify-center gap-10 p-4 bg-indigo-50 border-b border-black/10">
             {
